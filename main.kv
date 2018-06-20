@@ -1,0 +1,123 @@
+#:import C kivy.utils.get_color_from_hex
+#:import ListAdapter kivy.adapters.listadapter.ListAdapter
+#:import main main
+#:import FadeTransition kivy.uix.screenmanager.FadeTransition
+#:import TextInput kivy.uix.textinput.TextInput
+
+
+
+<BaseScreen>:
+    td_list_view: list_view
+    FloatLayout:
+        canvas.before:
+            Color:
+                rgba: C('#ff777b')
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+        BoxLayout:
+            orientation: "vertical"
+            size_hint_y: None
+            height: 50
+            pos: 0, 450
+            Label:
+                text: "Tasks"
+                font_size: 20
+
+        BoxLayout:
+            orientation: "vertical"
+            pos: 0, 130
+            size_hint_y: None
+            height: 310
+            ListView:
+                id: list_view
+                adapter:
+                    ListAdapter(data = [""], cls=main.ToDoListButton)
+
+        BoxLayout:
+            orientation: "horizontal"
+            size_hint_y: None
+            height: 100
+            pos: 86, 15
+            spacing: 15
+
+            Button:
+                size_hint: None, None
+                size: 50, 50
+                background_normal: "plus.png"
+                on_press:
+                    root.manager.transition.direction = "left"
+                    root.manager.transition.duration = 1
+                    root.manager.current = 'task'
+
+            Button:
+                size_hint: None, None
+                size: 50, 50
+                background_normal: "done.png"
+                on_press: root.update()
+
+
+<AddTaskScreen>:
+    text_input: text_input
+    FloatLayout:
+        canvas.before:
+            Color:
+                rgba: C('#ff777b')
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+        BoxLayout:
+            orientation: "vertical"
+            size_hint_y: None
+            height: 50
+            pos: 0, 450
+            Label:
+                text: "Tasks"
+                font_size: 20
+
+        BoxLayout:
+            orientation: "vertical"
+            pos: 0, 350
+            size_hint_y: None
+            height: 50
+            CTextInput:
+                id: text_input
+                focus: True
+                text: "Add your Task"
+
+        BoxLayout:
+            orientation: "horizontal"
+            spacing: 15
+            size_hint_y: None
+            height: 100
+            pos: 69, 15
+
+            Button:
+                size_hint: None, None
+                size: 50, 50
+                background_color: C("#f06d73")
+                background_normal: "go-back.png"
+                color: C("#ffffff")
+                font_size: 15
+                bold: True
+                on_press:
+                    root.manager.transition.direction = "left"
+                    root.manager.transition.duration = 1
+                    root.manager.current = 'base'
+
+            Button:
+                size_hint: None, None
+                size: 75, 75
+                background_color: C("#f06d73")
+                background_normal: ""
+                text: "Add Task"
+                color: C("#ffffff")
+                font_size: 15
+                bold: True
+                on_press: root.add_task()
+
+<CTextInput@TextInput>:
+    focus: True
+    readonly: False
