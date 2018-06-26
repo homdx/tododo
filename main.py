@@ -1,7 +1,8 @@
+
 import kivy
 from kivy.app import App
 from kivy.lang.builder import Builder
-from kivy.core.window import Window
+
 from kivy.utils import get_color_from_hex as C
 from kivy.config import Config
 from kivy.uix.boxlayout import BoxLayout
@@ -11,10 +12,12 @@ from kivy.properties import ObjectProperty
 from kivy.uix.screenmanager import ScreenManager, FadeTransition, Screen
 from kivy.uix.widget import Widget
 import sqlite3
-kivy.require('1.10.0')
 __version__ = '0.1'
+kivy.require('1.10.0')
 Config.set('graphics', 'resizable', '0')
-Window.size = (288, 512)
+Config.set('graphics', 'width', '288')
+Config.set('graphics', 'height', '512')
+
 file = 'tasks.json'
 class UI(FloatLayout):
     pass
@@ -53,17 +56,20 @@ class BaseScreen(Screen):
 
 
 class AddTaskScreen(Screen):
-    text_input = ObjectProperty()
     bs = BaseScreen
-    def add_task(self):
+    text_input = ObjectProperty()
+
+    def add_task(self, temp):
        # with open(file, 'w') as fileObject:
         #    fileObject.write(self.text_input.text+"\n")
         conn = sqlite3.connect('Tasks.sqlite')
         cursor = conn.cursor()
-        cursor.execute('INSERT INTO tasks (do) VALUES ("%s")'%(self.text_input.text))
+        cursor.execute('INSERT INTO tasks (do) VALUES ("%s")'%(temp))
         conn.commit()
         cursor.close()
         conn.close()
+        self.bs.update
+
 
 class ToDoListButton(ListItemButton):
     pass
@@ -73,14 +79,20 @@ Builder.load_file('main.kv')
 class TodoApp(App):
     title = "To do"
 
+    def update_task(self):
+        self.base_screen.td_list_view.adapter.data.extend([self.task.text_input.text])
+        self.base_screen.td_list_view._trigger_reset_populate()
+
     def on_start(self):
-        BaseScreen.update
+        self.base_screen.update()
 
     def build(self):
-        sm = ScreenManager()
-        sm.add_widget(BaseScreen(name="base"))
-        sm.add_widget(AddTaskScreen(name="task"))
-        return sm
+        self.sm = ScreenManager()
+        self.base_screen = BaseScreen(name="base")
+        self.task = AddTaskScreen(name='task')
+        self.sm.add_widget(self.base_screen)
+        self.sm.add_widget(self.task)
+        return self.sm
 
 if __name__ == "__main__":
     TodoApp().run()

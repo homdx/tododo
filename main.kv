@@ -4,8 +4,6 @@
 #:import FadeTransition kivy.uix.screenmanager.FadeTransition
 #:import TextInput kivy.uix.textinput.TextInput
 
-
-
 <BaseScreen>:
     td_list_view: list_view
     FloatLayout:
@@ -55,7 +53,7 @@
                 size_hint: None, None
                 size: 50, 50
                 background_normal: "done.png"
-                on_press: root.update()
+                on_press: root.task_done()
 
 
 <AddTaskScreen>:
@@ -82,10 +80,13 @@
             pos: 0, 350
             size_hint_y: None
             height: 50
-            CTextInput:
+            TextInput:
                 id: text_input
-                focus: True
                 text: "Add your Task"
+                size_hint_x: None
+                width: 288
+                focus: True
+                readonly: False
 
         BoxLayout:
             orientation: "horizontal"
@@ -116,8 +117,7 @@
                 color: C("#ffffff")
                 font_size: 15
                 bold: True
-                on_press: root.add_task()
+                on_press: root.add_task(text_input.text)
+                on_press: app.update_task()
 
-<CTextInput@TextInput>:
-    focus: True
-    readonly: False
+
