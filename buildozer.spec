@@ -88,25 +88,25 @@ fullscreen = 1
 android.permissions = INTERNET
 
 # (int) Android API to use
-android.api = 19
+# android.api = 19
 
 # (int) Minimum API required
-android.minapi = 9
+# android.minapi = 9
 
 # (int) Android SDK version to use
-android.sdk = 20
+# android.sdk = 20
 
 # (str) Android NDK version to use
-android.ndk = 9c
+# android.ndk = 9c
 
 # (bool) Use --private data storage (True) or --dir public storage (False)
 android.private_storage = False
 
 # (str) Android NDK directory (if empty, it will be automatically downloaded.)
-android.ndk_path =
+# android.ndk_path =
 
 # (str) Android SDK directory (if empty, it will be automatically downloaded.)
-android.sdk_path =
+# android.sdk_path =
 
 # (str) ANT directory (if empty, it will be automatically downloaded.)
 #android.ant_path =
